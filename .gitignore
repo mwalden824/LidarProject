@@ -1,0 +1,7 @@
+*.pcd
+/build/*
+/src/quiz/ransac/build/*
+/src/quiz/cluster/build/*
+*.asc
+workspace.code-workspace
+*.gif
