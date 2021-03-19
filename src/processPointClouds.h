@@ -1,3 +1,8 @@
+/*  Michael Walden
+    Lidar Project 1
+    Sensor Fusion Nano Degree
+    Udacity */
+
 // PCL lib Functions for processing point clouds 
 
 #ifndef PROCESSPOINTCLOUDS_H_

@@ -107,37 +107,6 @@ void render3DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Bo
 
 }
 
-// void render3DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Box window, int& iteration, uint depth=0)
-// {
-
-// 	if(node!=NULL)
-// 	{
-// 		Box upperWindow = window;
-// 		Box lowerWindow = window;
-// 		// split on x axis
-// 		if(depth%2==0)
-// 		{
-// 			viewer->addLine(pcl::PointXYZ(node->point[0], window.y_min, 0),pcl::PointXYZ(node->point[0], window.y_max, 0),0,0,1,"line"+std::to_string(iteration));
-// 			lowerWindow.x_max = node->point[0];
-// 			upperWindow.x_min = node->point[0];
-// 		}
-// 		// split on y axis
-// 		else
-// 		{
-// 			viewer->addLine(pcl::PointXYZ(window.x_min, node->point[1], 0),pcl::PointXYZ(window.x_max, node->point[1], 0),1,0,0,"line"+std::to_string(iteration));
-// 			lowerWindow.y_max = node->point[1];
-// 			upperWindow.y_min = node->point[1];
-// 		}
-// 		iteration++;
-
-// 		render2DTree(node->left,viewer, lowerWindow, iteration, depth+1);
-// 		render2DTree(node->right,viewer, upperWindow, iteration, depth+1);
-
-
-// 	}
-
-// }
-
 
 void clusterHelper(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
 {
@@ -183,49 +152,6 @@ std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<flo
 
 }
 
-// void clusterHelper3d(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
-// {
-// 	processed[i] = true;
-// 	cluster.push_back(i);
-
-// 	std::vector<int> nearest = tree->search(points[i], distanceTol);
-
-// 	for (int id : nearest)
-// 	{
-// 		if (!processed[id])
-// 		{
-// 			clusterHelper3d(id, points, cluster, processed, tree, distanceTol);
-// 		}
-// 	}
-// }
-
-// std::vector<std::vector<int>> euclideanCluster3d(const std::vector<std::vector<std::vector<float>>> points, KdTree* tree, float distanceTol)
-// {
-
-// 	// TODO: Fill out this function to return list of indices for each cluster
-
-// 	std::vector<std::vector<int>> clusters;
-
-// 	std::vector<bool> processed(points.size(), false);
-
-// 	int i = 0;
-// 	while (i < points.size())
-// 	{
-// 		if (processed[i])
-// 		{
-// 			i++;
-// 			continue;
-// 		}
-
-// 		std::vector<int> cluster;
-// 		clusterHelper3d(i, points, cluster, processed, tree, distanceTol);
-// 		clusters.push_back(cluster);
-// 		i++;
-// 	}
- 
-// 	return clusters;
-// }
-
 int main ()
 {
 
@@ -235,15 +161,12 @@ int main ()
   	window.x_max =  10;
   	window.y_min = -10;
   	window.y_max =  10;
-  	// window.z_min =   0;
-  	// window.z_max =   0;
   	window.z_min =   -10;
   	window.z_max =   10;
 	pcl::visualization::PCLVisualizer::Ptr viewer = initScene(window, 25);
 
 	// Create data
 	// std::vector<std::vector<float>> points = { {-6.2,7}, {-6.3,8.4}, {-5.2,7.1}, {-5.7,6.3}, {7.2,6.1}, {8.0,5.3}, {7.2,7.1}, {0.2,-7.1}, {1.7,-6.9}, {-1.2,-7.2}, {2.2,-8.9} };
-	// 															r			r			r				r			g			g			g			b			b			b				b	
 	std::vector<std::vector<float>> points = { {-6.2,7,-8.1}, {-6.3,8.4,-8.4}, {-5.2,7.1,-9.3}, {-5.7,6.3,-7.2}, {7.2,6.1,8.6}, {8.0,5.3,9.1}, {7.2,7.1,7.5}, {0.2,-7.1,0.9}, {1.7,-6.9,-1.1}, {-1.2,-7.2,-0.2}, {2.2,-8.9,0.4} };
 	//std::vector<std::vector<float>> points = { {-6.2,7}, {-6.3,8.4}, {-5.2,7.1}, {-5.7,6.3} };
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = CreateData3d(points);

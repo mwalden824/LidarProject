@@ -1,6 +1,9 @@
-/* \author Aaron Brown */
-// Quiz on implementing kd tree
+/*  Michael Walden
+    Lidar Project 1
+    Sensor Fusion Nano Degree
+    Udacity */
 
+// Kd Tree 3D implementation
 
 // Structure to represent node of kd tree
 struct Node

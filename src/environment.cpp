@@ -1,4 +1,7 @@
-/* \author Aaron Brown */
+/*  Michael Walden
+    Lidar Project 1
+    Sensor Fusion Nano Degree
+    Udacity */
 // Create simple 3d highway enviroment using PCL
 // for exploring self-driving car sensors
 
@@ -50,7 +53,7 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
 
     // TODO:: Create point processor
     pcl::PointCloud<pcl::PointXYZ>::Ptr scanResults = lidar->scan();
-    //renderRays(viewer, lidar->position, scanResults);
+    // renderRays(viewer, lidar->position, scanResults);
     // renderPointCloud(viewer, scanResults, "scanResults");
 
     // Create Process point clouds object
@@ -95,7 +98,7 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
     // renderPointCloud(viewer, segmentCloud.first, "obstCloud", Color(1,0,0));
     renderPointCloud(viewer, segmentCloud.second, "planeCloud", Color(0,1,0));
 
-    // // Cluster obstacle points (Original parameters 1.0, 3.0, 30)
+    // Cluster obstacle points (Original parameters 1.0, 3, 30)
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessor->Clustering(segmentCloud.first, 1.0, 7, 300);
     
     int clusterId = 0;

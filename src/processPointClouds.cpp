@@ -1,4 +1,9 @@
-// PCL lib Functions for processing point clouds 
+/*  Michael Walden
+    Lidar Project 1
+    Sensor Fusion Nano Degree
+    Udacity */
+
+// Code for Processing Point Clouds
 
 #include "processPointClouds.h"
 #include <unordered_set>
@@ -115,7 +120,7 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
 		while (inliers.size() < 3)
 			inliers.insert(rand()%(cloud->points.size()));
 
-		// Calculate coefficients of the line that passes through these points
+		// Calculate coefficients of the plane that passes through these points
 		float x1, x2, x3, y1, y2, y3, z1, z2, z3;
 
 		auto itr = inliers.begin();
@@ -137,7 +142,7 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
 		float c = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
 		float d = -(a * x1 + b * y1 + c * z1);
 
-		// Measure distance between every point and fitted line
+		// Measure distance between every point and fitted plane
 		for (int ind = 0; ind < cloud->points.size(); ind++)
 		{
 			if (inliers.count(ind) > 0)
@@ -182,23 +187,6 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
     return segResult;
 }
 
-// template<typename PointT>
-// void ProcessPointClouds<PointT>::clusterHelper(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
-// {
-// 	processed[i] = true;
-// 	cluster.push_back(i);
-
-// 	std::vector<int> nearest = tree->search(points[i], distanceTol);
-
-// 	for (int id : nearest)
-// 	{
-// 		if (!processed[id])
-// 		{
-// 			clusterHelper(id, points, cluster, processed, tree, distanceTol);
-// 		}
-// 	}
-// } 
-
 template<typename PointT>
 void ProcessPointClouds<PointT>::clusterHelper(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
 {
@@ -212,8 +200,6 @@ void ProcessPointClouds<PointT>::clusterHelper(int i, const std::vector<std::vec
 		if (!processed[id])
 		{
 			clusterHelper(id, points, cluster, processed, tree, distanceTol);
-            // processed[i] = true;
-            // cluster.push_back(i);
 		}
 	}
 } 
@@ -291,20 +277,13 @@ std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::C
             cloudCluster->width = cloudCluster->points.size();
             cloudCluster->height = 1;
             cloudCluster->is_dense = true;
-
-            // if ((cloudCluster->width >= minSize) && (cloudCluster->width <= maxSize))
-            // {
-            //     clusters.push_back(cloudCluster);
-            // }
-            // clusters.push_back(cloudCluster);
         }
 
+        // Only add cluster to clusters if minSize < size < maxSize
         if ((cloudCluster->width >= minSize) && (cloudCluster->width <= maxSize))
         {
             clusters.push_back(cloudCluster);
         }
-        // clusters.push_back(cloudCluster);
-
     }
 
     auto endTime = std::chrono::steady_clock::now();
