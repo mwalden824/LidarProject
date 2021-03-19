@@ -79,16 +79,16 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     }
 }
 
-// void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointClouds<pcl::PointXYZI>* pointProcessor, const pcl::PointCloud<pcl::PointXYZI>::Ptr& inputCloud)
-void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
+void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointClouds<pcl::PointXYZI>* pointProcessor, const pcl::PointCloud<pcl::PointXYZI>::Ptr& inputCloud)
+// void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
 {
     // Create Process point clouds object
-    ProcessPointClouds<pcl::PointXYZI>* pointProcessor = new ProcessPointClouds<pcl::PointXYZI>();
-    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessor->loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");
+    // ProcessPointClouds<pcl::PointXYZI>* pointProcessor = new ProcessPointClouds<pcl::PointXYZI>();
+    // pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessor->loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");
     // renderPointCloud(viewer, inputCloud, "inputCloud");
 
-    // *inputCloud = *pointProcessor->FilterCloud(inputCloud, 0.4, Eigen::Vector4f (-10, -5, -2, 1), Eigen::Vector4f (30, 8, 1, 1));
-    inputCloud = pointProcessor->FilterCloud(inputCloud, 0.4, Eigen::Vector4f (-10, -5, -2, 1), Eigen::Vector4f (30, 8, 1, 1));
+    *inputCloud = *pointProcessor->FilterCloud(inputCloud, 0.4, Eigen::Vector4f (-10, -5, -2, 1), Eigen::Vector4f (30, 8, 1, 1));
+    // inputCloud = pointProcessor->FilterCloud(inputCloud, 0.4, Eigen::Vector4f (-10, -5, -2, 1), Eigen::Vector4f (30, 8, 1, 1));
     
     // renderPointCloud(viewer, inputCloud, "filterCloud");
 
@@ -107,8 +107,8 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
     // For each cluster, render points in different color, and bound with box
     for(pcl::PointCloud<pcl::PointXYZI>::Ptr cluster : cloudClusters)
     {
-        // std::cout << "Cluster size ";
-        // pointProcessor->numPoints(cluster);
+        std::cout << "Cluster size ";
+        pointProcessor->numPoints(cluster);
         renderPointCloud(viewer, cluster, "obstCloud"+std::to_string(clusterId), colors[clusterId%3]);
         Box box = pointProcessor->BoundingBox(cluster);
         renderBox(viewer, box, clusterId);
@@ -145,31 +145,31 @@ int main (int argc, char** argv)
     std::cout << "starting enviroment" << std::endl;
 
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-    CameraAngle setAngle = XY;
-    // CameraAngle setAngle = FPS;
+    // CameraAngle setAngle = XY;
+    CameraAngle setAngle = FPS;
     initCamera(setAngle, viewer);
     // simpleHighway(viewer);
-    cityBlock(viewer);
+    // cityBlock(viewer);
 
-    // ProcessPointClouds<pcl::PointXYZI>* pointProcessor = new ProcessPointClouds<pcl::PointXYZI>();
-    // // std::vector<boost::filesystem::path> stream = pointProcessor->streamPcd("../src/sensors/data/pcd/data_1");
+    ProcessPointClouds<pcl::PointXYZI>* pointProcessor = new ProcessPointClouds<pcl::PointXYZI>();
+    std::vector<boost::filesystem::path> stream = pointProcessor->streamPcd("../src/sensors/data/pcd/data_1");
     // std::vector<boost::filesystem::path> stream = pointProcessor->streamPcd("../src/sensors/data/pcd/data_2");
-    // auto streamIterator = stream.begin();
-    // pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud;
+    auto streamIterator = stream.begin();
+    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud;
 
     while (!viewer->wasStopped ())
     {
-        // // Clear viewer
-        // viewer->removeAllPointClouds();
-        // viewer->removeAllShapes();
+        // Clear viewer
+        viewer->removeAllPointClouds();
+        viewer->removeAllShapes();
 
-        // // Load pcd and run obstacle detection process
-        // inputCloud = pointProcessor->loadPcd((*streamIterator).string());
-        // cityBlock(viewer, pointProcessor, inputCloud);
+        // Load pcd and run obstacle detection process
+        inputCloud = pointProcessor->loadPcd((*streamIterator).string());
+        cityBlock(viewer, pointProcessor, inputCloud);
 
-        // streamIterator++;
-        // if (streamIterator == stream.end())
-        //     streamIterator = stream.begin();
+        streamIterator++;
+        if (streamIterator == stream.end())
+            streamIterator = stream.begin();
 
         viewer->spinOnce ();
     } 
