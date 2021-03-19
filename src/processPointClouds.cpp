@@ -296,8 +296,15 @@ std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::C
             // {
             //     clusters.push_back(cloudCluster);
             // }
+            // clusters.push_back(cloudCluster);
+        }
+
+        if ((cloudCluster->width >= minSize) && (cloudCluster->width <= maxSize))
+        {
             clusters.push_back(cloudCluster);
         }
+        // clusters.push_back(cloudCluster);
+
     }
 
     auto endTime = std::chrono::steady_clock::now();
