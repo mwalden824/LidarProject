@@ -107,8 +107,8 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
     // For each cluster, render points in different color, and bound with box
     for(pcl::PointCloud<pcl::PointXYZI>::Ptr cluster : cloudClusters)
     {
-        std::cout << "Cluster size ";
-        pointProcessor->numPoints(cluster);
+        // std::cout << "Cluster size ";
+        // pointProcessor->numPoints(cluster);
         renderPointCloud(viewer, cluster, "obstCloud"+std::to_string(clusterId), colors[clusterId%3]);
         Box box = pointProcessor->BoundingBox(cluster);
         renderBox(viewer, box, clusterId);
