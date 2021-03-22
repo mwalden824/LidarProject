@@ -188,7 +188,8 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
 }
 
 template<typename PointT>
-void ProcessPointClouds<PointT>::clusterHelper(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
+// void ProcessPointClouds<PointT>::clusterHelper(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
+void ProcessPointClouds<PointT>::clusterHelper(int i, const std::vector<PointT> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
 {
 	processed[i] = true;
 	cluster.push_back(i);
@@ -205,7 +206,8 @@ void ProcessPointClouds<PointT>::clusterHelper(int i, const std::vector<std::vec
 } 
 
 template<typename PointT>
-std::vector<std::vector<int>> ProcessPointClouds<PointT>::euclideanCluster(const std::vector<std::vector<float>> points, KdTree* tree, float distanceTol)
+// std::vector<std::vector<int>> ProcessPointClouds<PointT>::euclideanCluster(const std::vector<std::vector<float>> points, KdTree* tree, float distanceTol)
+std::vector<std::vector<int>> ProcessPointClouds<PointT>::euclideanCluster(const std::vector<PointT> points, KdTree* tree, float distanceTol)
 {
 
 	// TODO: Fill out this function to return list of indices for each cluster
@@ -275,23 +277,26 @@ std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::C
     // End of PCL Clustering
 
     // Create KdTree
-    KdTree* tree = new KdTree;
+    // KdTree* tree = new KdTree;
+    KdTree<PointT>* tree = new KdTree<PointT>;
 
     // For every point in point cloud, insert point into tree
-    std::vector<std::vector<float>> points;
+    // std::vector<std::vector<float>> points;
+    // for (int i = 0; i < cloud->points.size(); i++)
+    // {
+    //     PointT point = cloud->points[i];
+
+    //     std::vector<float> pointVector;
+
+    //     pointVector.push_back(point.x);
+    //     pointVector.push_back(point.y);
+    //     pointVector.push_back(point.z);
+
+    //     tree->insert(pointVector,i);
+    //     points.push_back(pointVector);
+    // }
     for (int i = 0; i < cloud->points.size(); i++)
-    {
-        PointT point = cloud->points[i];
-
-        std::vector<float> pointVector;
-
-        pointVector.push_back(point.x);
-        pointVector.push_back(point.y);
-        pointVector.push_back(point.z);
-
-        tree->insert(pointVector,i);
-        points.push_back(pointVector);
-    }
+        tree->insert(cloud->points[i],i);
 
     auto startTime = std::chrono::steady_clock::now();
 

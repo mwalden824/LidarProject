@@ -54,9 +54,11 @@ public:
   
 private:
 
-    void clusterHelper(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol);
+    // void clusterHelper(int i, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol);
+    void clusterHelper(int i, const std::vector<PointT> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol);
 
-    std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<float>> points, KdTree* tree, float distanceTol);
+    // std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<float>> points, KdTree* tree, float distanceTol);
+    std::vector<std::vector<int>> euclideanCluster(const std::vector<PointT> points, KdTree* tree, float distanceTol);
 
 };
 #endif /* PROCESSPOINTCLOUDS_H_ */
